@@ -11,8 +11,11 @@ var PetsSchema = mongoose.Schema({
   tipo: {
     type: String,
     require: true,
-  },
+  },  
   edad: {
+    type: Number,
+  },
+  tamano: {
     type: Number,
   },
   raza: {

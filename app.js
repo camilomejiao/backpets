@@ -5,9 +5,9 @@ var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 
-app.use(bodyParser.json());
+app.use(express.static("public"));
 
-var app = express();
+app.use(bodyParser.json());
 
 //Cargar Rutas
 var user_routes = require("./routes/user");

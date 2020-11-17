@@ -24,15 +24,16 @@ function savePets(req, res) {
 
   if (params.nombre && params.tipo) {
     //Asignamos los valores
-    pets.nombre = params.nombre;
-    pets.tipo = params.tipo;
-    pets.edad = params.edad;
-    pets.raza = params.raza;
+    pets.nombre      = params.nombre;
+    pets.tipo        = params.tipo;
+    pets.edad        = params.edad;
+    pets.raza        = params.raza;
+    pets.tamano      = params.tamano;
     pets.descripcion = params.descripcion;    
-    pets.vacunas = params.vacunas;
+    pets.vacunas     = params.vacunas;
     pets.tipo_vacuna = params.tipo_vacuna;
-    pets.image = null;
-    pets.user = req.user.sub;   
+    pets.image       = null;
+    pets.user        = req.user.sub;   
 
     pets.save((err, petsStore) => {
       if (err) {
@@ -41,7 +42,10 @@ function savePets(req, res) {
         if (!petsStore) {
           res.status(404).send({ message: "No se ha guardado la mascota" });
         } else {
-          res.status(200).send({ pets: petsStore });
+          res.status(200).send({ 
+            status: 'success',
+            pets: petsStore 
+          });
         }
       }
     });
@@ -66,7 +70,8 @@ function getPets(req, res){
                 });
             }else {
                 res.status(200).send({
-                    pets
+                  success: "true",
+                  pets: pets
                 });
             }
         }  

@@ -59,7 +59,8 @@ function getShops(req, res) {
           });
         } else {
           res.status(200).send({
-            shop
+            success: "true",
+            shop: shop
           });
         }
       }

@@ -9,8 +9,7 @@ var UserSchema = Schema({
     require: true,
   },
   lastname: {
-    type: String,
-    require: true,
+    type: String    
   },
   nick: {
     type: String,

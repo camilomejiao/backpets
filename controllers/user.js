@@ -5,6 +5,7 @@ var User = require('../models/user');
 var fs = require('fs');
 //var path = require('path');
 var jwt = require('../services/jwt');
+var googleVerify = require('../middlewares/google-verify');
 
 //Pruebas
 function home(req, res){
@@ -19,10 +20,10 @@ function saveUser(req, res){
     //console.log(params);
     var user = new User();
 
-    if (params.name && params.lastname && params.nick && params.email && params.password ) {        
+    if (params.name && params.lastname && params.email && params.password ) {
         user.name = params.name;
         user.lastname = params.lastname;
-        user.nick = params.nick;
+        user.nick = params.name;
         user.email = params.email;        
         user.image = null;
         user.google = false;
@@ -51,6 +52,7 @@ function saveUser(req, res){
                                 }
                                 if (userStored) {
                                       return res.status(200).send({
+                                        status: 'success',
                                         token: jwt.createToken(user),
                                         user: userStored,
                                       });      
@@ -94,11 +96,15 @@ function loginUser(req, res){
                         return res.status(200).send({
                           token: jwt.createToken(user),
                           user: user,
+                          id: user._id,
                         });                                                
                         //return res.status(200).send({ user });
                     }
                 } else {
-                    return res.status(404).send({ message: 'El usuario no se ha podido identificar!'});
+                    return res.status(404).send({ 
+                        error: 'Error',
+                        message: 'El usuario no se ha podido identificar!'
+                    });
                 }
             });
         } else {
@@ -107,11 +113,50 @@ function loginUser(req, res){
     });
 }
 
+async function google(req, res) {
+    var user = new User();
+    var Token = req.body.Token;    
+    //console.log(Token);
+
+    try{
+        var validacion = await googleVerify.verify(Token,(err, validacion) => {
+            if (err) {
+              return handleError(err);
+            } else {
+              //console.log(validacion);
+              return validacion;
+            }
+          }
+        );
+        //console.log(validacion);
+
+        //User.find({ $or: [{ email: validacion.email.toLowerCase() }] }).exec((err, users) => {
+            //if (err) {
+               //return res.status(500).send({ message: "Error en la peticion de usuarios" });
+            //}
+            //if (users && users.length >= 1) {
+               //return res.status(200).send({
+                   //message: "El usuario o Email ya se encuentran registrados",
+                //});
+            //} else {
+//
+            //}
+        //});
+
+        res.status(200).send({
+          ok: true,
+          message: "Token Validado!",
+          Token: validacion,
+        });
+
+    } catch (error){
+        res.status(401).send({ message: "Token Incorrecto!" });
+    }
+}
+
 //Listar todos los usuarios paginado
 function getUsers(req, res) {
-  User.find({})
-    .populate()
-    .exec((err, users) => {
+  User.find({}).populate().exec((err, users) => {
       if (err) {
         res.status(500).send({
           message: "Error en la petición",
@@ -150,6 +195,7 @@ module.exports = {
   home,
   saveUser,
   loginUser,
+  google,
   getUsers,
   getUser
 };

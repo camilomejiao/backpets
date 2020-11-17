@@ -24,7 +24,6 @@ function saveServices(req, res) {
     services.fecha = params.fecha;
     services.user = req.user.sub;
 
-    //Comproba usuarios duplicados.                                                                                                                  
     services.save((err, serviceStore) => {
       if (err) {
         res.status(500).send({ message: "Error en el servidor" });
@@ -32,7 +31,10 @@ function saveServices(req, res) {
         if (!serviceStore) {
           res.status(404).send({ message: "No se ha guardado la mascota" });
         } else {
-          res.status(200).send({ services: serviceStore });
+          res.status(200).send({ 
+            status: "success",
+            services: serviceStore 
+          });
         }
       }
     }); 
@@ -44,7 +46,7 @@ function saveServices(req, res) {
 }
 
 //Listar todos los usuarios paginado
-function getServices(req, res) {
+function getServicesCita(req, res) {
   Services.find({})
     .populate()
     .exec((err, services) => {
@@ -59,7 +61,8 @@ function getServices(req, res) {
           });
         } else {
           res.status(200).send({
-            services,
+            success: 'true',
+            services: services
           });
         }
       }
@@ -100,7 +103,10 @@ function updateServices(req, res) {
             message: "No se ha actualizado el Services",
             });
         } else {
-            res.status(200).send({ service: servicesUpdate });
+            res.status(200).send({
+              success: "true",
+              service: servicesUpdate
+            });
         }
         }
     });
@@ -116,7 +122,10 @@ function deleteServices(req, res) {
       if (!servicesRemove) {
         res.status(404).send({ message: "No se ha borrado el Services" });
       } else {
-        res.status(200).send({ service: servicesRemove });
+        res.status(200).send({ 
+          success: 'true', 
+          service: servicesRemove 
+        });
       }
     }
   });
@@ -125,7 +134,7 @@ function deleteServices(req, res) {
 module.exports = {
   homeServices,
   saveServices,
-  getServices,
+  getServicesCita,
   getService,
   updateServices,
   deleteServices

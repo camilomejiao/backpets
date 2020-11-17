@@ -1,0 +1,2 @@
+GOOGLE _ID = 981374285118-008ek1m6tbvb99cnrc7me8lobk3tds1c.apps.googleusercontent.com
+GOOGLE_SECRET = Bk-SU1B1iLtQm0M4OxVooOgm
