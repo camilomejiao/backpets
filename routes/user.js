@@ -11,7 +11,7 @@ api.get("/home", UserController.home);
 api.post("/register", UserController.saveUser);
 api.get("/usuarios", auth.authorization, UserController.getUsers);
 api.get("/usuario/:id", auth.authorization, UserController.getUser);
-api.post("/login", UserController.loginUser);
-api.post("/google", UserController.google);
+api.put("/login", UserController.loginUser);
+api.delete("/google", UserController.google);
 
 module.exports = api;
